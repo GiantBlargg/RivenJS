@@ -35,6 +35,7 @@ require(["jquery", "data/MHWK", "data/tBMP", "data/Binary", "dev/globalizer", "d
 	window.findBMP = function(name) {
 		for (f in file.tBMP) {
 			if (file.tBMP[f].name == name) {
+				showBMP(f);
 				return f;
 			}
 		}

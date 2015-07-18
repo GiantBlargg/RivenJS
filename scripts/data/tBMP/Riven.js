@@ -138,7 +138,7 @@ define(["data/Binary"], function(Binary) {
 					var b2 = data.getByte();
 					var m1 = (((b1 & 3) << 8) + b2);
 
-					for (var i = 0; i < ((b1 >> 3) + 1); i++) {// one less iteration
+					for (var j = 0; j < ((b1 >> 3) + 1); j++) {// one less iteration
 						B_PIXEL_MINUS(m1);
 						B_PIXEL_MINUS(m1);
 					}
@@ -177,7 +177,7 @@ define(["data/Binary"], function(Binary) {
 
 		function B_NDUPLETS(n, cmd) {
 			var m1 = ((cmd & 3) << 8) + data.getByte();
-			for (var i = 0; i < n; i++) {
+			for (var j = 0; j < n; j++) {
 				decImg.push(decImg[decImg.length - m1]);
 			}
 		}
