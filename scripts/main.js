@@ -11,22 +11,28 @@ require(["jquery", "data/MHWK", "data/tBMP", "data/Binary", "dev/globalizer", "d
 		$(reader).load(function() {
 			window.file = MHWK(new Binary(reader.result));
 			/*for (i in window.file["tBMP"]) {
-				showBMP(i);
-			}*/
+			 showBMP(i);
+			 }*/
 			$(".hide").show();
 		});
 	});
 
 	function showBMP(id) {
 		var bmp = tBMP(window.file.tBMP[id].file);
-		$("#disp").append(bmp);
-		$(bmp).css("image-rendering", "-moz-crisp-edges");
-		$(bmp).css("width", $("#zoom")[0].value * $(bmp)[0].width);
+		var canvas = document.createElement('canvas');
+		var ctx = canvas.getContext("2d");
+		canvas.width=bmp.width;
+		canvas.height=bmp.height;
+		ctx.putImageData(bmp, 0, 0);
+		$("#disp").append(canvas);
+		$(canvas).css("image-rendering", "-moz-crisp-edges");
+		$(canvas).css("width", $("#zoom")[0].value * bmp.width);
 	}
 
+
 	$("#pic").click(function() {
-	 showBMP($("#number")[0].value);
-	 });
+		showBMP($("#number")[0].value);
+	});
 	$("#zoom").change(function() {
 		$("canvas").each(function() {
 			$(this).css("width", $("#zoom")[0].value * $(this)[0].width);

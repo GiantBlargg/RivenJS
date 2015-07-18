@@ -32,19 +32,13 @@ define(["data/Binary", "data/tBMP/None", "data/tBMP/Riven"], function(Binary, No
 
 	return function(data) {
 
-		var canvas = document.createElement('canvas');
-		var ctx = canvas.getContext("2d");
-
 		var width = data.getUint16(0);
 		var height = data.getUint16(2);
 
-		canvas.width = width;
-		canvas.height = height;
-
 		var bytesRow = data.getUint16(4);
-		
+
 		console.log(bytesRow);
-		
+
 		var comp = data.getUint16(6);
 
 		var bitDepth = bitDepths[comp & 7];
@@ -62,7 +56,11 @@ define(["data/Binary", "data/tBMP/None", "data/tBMP/Riven"], function(Binary, No
 			var palette = [];
 			for (var i = 0; i < numColours; i++) {
 				var offset = 12 + i * bitPCol / 8;
-				palette[i] = "rgb(" + data.getUint8(offset + 2) + "," + data.getUint8(offset + 1) + "," + data.getUint8(offset) + ")";
+				palette[i] = {
+					r : data.getUint8(offset + 2),
+					g : data.getUint8(offset + 1),
+					b : data.getUint8(offset)
+				};
 			}
 		}
 
@@ -70,24 +68,16 @@ define(["data/Binary", "data/tBMP/None", "data/tBMP/Riven"], function(Binary, No
 
 		console.log("decoding complete, coloring");
 
-		drawImg();
+		var finalImg = [];
 
-		function drawImg() {
-			for (pixel in decImg) {
-				var row = Math.floor(pixel / bytesRow);
-				var c = decImg[pixel];
-				drawPixel(pixel - row * bytesRow, row, palette[c], c, pixel);
+		for (pixel in decImg) {
+			var colour =palette[decImg[pixel]];
+			if (pixel % bytesRow < width) {
+				finalImg.push(colour.r, colour.g, colour.b, 255);
 			}
 		}
 
-		function drawPixel(x, y, colour, c, pixel) {
-			if ( typeof colour != "string") {
-				//throw new Error(colour, c, pixel);
-			}
-			ctx.fillStyle = colour;
-			ctx.fillRect(x, y, 1, 1);
-		}
-
-		return canvas;
+		console.log(finalImg);
+		return new ImageData(new Uint8ClampedArray(finalImg), width, height);
 	};
 });
