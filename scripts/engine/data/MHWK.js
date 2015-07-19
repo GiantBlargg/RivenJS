@@ -1,4 +1,4 @@
-define(["data/Binary"],function(Binary) {
+define(["engine/data/Binary"],function(Binary) {
 	return function(data) {
 		//TODO add proper errors
 		//sanity checks

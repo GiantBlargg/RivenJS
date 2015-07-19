@@ -1,4 +1,4 @@
-define(["data/Binary", "data/tBMP/None", "data/tBMP/Riven"], function(Binary, None, Riven) {
+define(["engine/data/Binary", "engine/data/tBMP/None", "engine/data/tBMP/Riven"], function(Binary, None, Riven) {
 
 	// This emulates byte overflow similar to lower level languages
 	function bound(array, min, max) {//Might be unnecessary but i'll leave it in for saftey
@@ -37,8 +37,6 @@ define(["data/Binary", "data/tBMP/None", "data/tBMP/Riven"], function(Binary, No
 
 		var bytesRow = data.getUint16(4);
 
-		console.log(bytesRow);
-
 		var comp = data.getUint16(6);
 
 		var bitDepth = bitDepths[comp & 7];
@@ -66,8 +64,6 @@ define(["data/Binary", "data/tBMP/None", "data/tBMP/Riven"], function(Binary, No
 
 		var decImg = bound(Secondary[comp2](bound(Primary[comp1](data.subs(imgOff), width, height, bytesRow), 0, 256), width, height, bytesRow), 0, 256);
 
-		console.log("decoding complete, coloring");
-
 		var finalImg = [];
 
 		for (pixel in decImg) {
@@ -77,7 +73,6 @@ define(["data/Binary", "data/tBMP/None", "data/tBMP/Riven"], function(Binary, No
 			}
 		}
 
-		console.log(finalImg);
 		return new ImageData(new Uint8ClampedArray(finalImg), width, height);
 	};
 });

@@ -15,14 +15,14 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE. 
  */
-
+define(function(require, exports, module) {
 exports.parse = exports.decode = decode
 exports.stringify = exports.encode = encode
 
 exports.safe = safe
 exports.unsafe = unsafe
 
-var eol = process.platform === 'win32' ? '\r\n' : '\n'
+var eol = navigator.platform === 'win32' ? '\r\n' : '\n'
 
 function encode (obj, opt) {
   var children = []
@@ -208,3 +208,4 @@ function unsafe (val, doUnesc) {
   }
   return val
 }
+});

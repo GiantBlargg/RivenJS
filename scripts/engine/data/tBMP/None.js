@@ -1,4 +1,4 @@
-define(["data/Binary"], function(Binary) {
+define(function() {
 	return function(data, width, height, bytesRow) {
 		var result = [];
 		for (var i = 0; i < bytesRow * height; i++) {

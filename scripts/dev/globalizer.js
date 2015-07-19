@@ -10,7 +10,7 @@ function globalize() {
 	for (a in arguments) {
 		var arg = arguments[a];
 		require([arguments[a]],function(mod){
-			window[arg] = mod;
+			window[arg.replace("/","_")] = mod;
 		});
 	}
 }
