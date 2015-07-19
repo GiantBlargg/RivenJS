@@ -43,11 +43,11 @@ define(function() {
 
 	DataView.prototype.getByte = function() {
 		this.pos++;
-		try {
-			return this.getUint8(this.pos - 1);
-		} catch (e) {
-			return 0;
-		}
+		return this.getUint8(this.pos - 1);
+	};
+	DataView.prototype.getShort = function() {
+		this.pos += 2;
+		return this.getUint16(this.pos - 2);
 	};
 
 	return DataView;

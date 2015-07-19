@@ -1,4 +1,4 @@
-define(["engine/data/MHWK", "engine/data/tBMP", "engine/data/ini", "engine/data/Binary"], function(MHWK, tBMP, ini) {
+define(["engine/data/MHWK", "engine/data/CARD", "engine/data/tBMP", "engine/data/ini", "engine/data/Binary"], function(MHWK, CARD, tBMP, ini) {
 	var stack = {};
 
 	var gimme;
@@ -6,6 +6,7 @@ define(["engine/data/MHWK", "engine/data/tBMP", "engine/data/ini", "engine/data/
 	var fileNames = {};
 
 	var typeProcess = {
+		CARD : CARD,
 		tBMP : tBMP
 	};
 
@@ -45,11 +46,11 @@ define(["engine/data/MHWK", "engine/data/tBMP", "engine/data/ini", "engine/data/
 					return;
 				}
 			}
-			
+
 			if (proc.length) {
 				return;
 			};
-			
+
 			console.log(name, "loaded");
 			if (callback)
 				callback();
@@ -111,7 +112,7 @@ define(["engine/data/MHWK", "engine/data/tBMP", "engine/data/ini", "engine/data/
 	};
 
 	stack.load = function(name, callback) {
-		console.log(name,"loading")
+		console.log(name, "loading")
 		for (f in fileNames[name]) {
 			gimme(f, process(name, callback));
 		}
