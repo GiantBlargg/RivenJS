@@ -1,8 +1,18 @@
+/**
+ * This file contains code based on code liscenced under the GPL.
+ *
+ * The original can be found at https://github.com/scummvm/scummvm/blob/master/engines/mohawk/bitmap.cpp
+ *
+ * Until this section is rewritten to not use this code, this file will be licensed seperatly from the rest of this project under the GPL-2.0.
+ * 
+ * Please don't sue me!
+ */
+
 define(["engine/data/Binary"], function(Binary) {
-	return function(data,width,height,bytesRow) {
-		
+	return function(data, width, height, bytesRow) {
+
 		data.setPos(4);
-		
+
 		var decImg = [];
 		//TODO rewrite to plagerise less
 		while (decImg.length < bytesRow * height) {
@@ -181,7 +191,7 @@ define(["engine/data/Binary"], function(Binary) {
 				decImg.push(decImg[decImg.length - m1]);
 			}
 		}
-		
+
 		return decImg;
 	};
 });

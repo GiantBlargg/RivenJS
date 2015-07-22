@@ -49,6 +49,10 @@ define(function() {
 		this.pos += 2;
 		return this.getUint16(this.pos - 2);
 	};
+	DataView.prototype.GetSShort = function() {
+		this.pos += 2;
+		return this.getInt16(this.pos - 2);
+	};
 
 	return DataView;
 });

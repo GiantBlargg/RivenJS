@@ -1,42 +1,26 @@
-define(["engine/data/MHWK", "engine/data/CARD", "engine/data/tBMP", "engine/data/ini", "engine/data/Binary"], function(MHWK, CARD, tBMP, ini) {
+define(["engine/data/MHWK", "engine/data/typeProcess", "engine/data/ini", "engine/data/Binary"], function(MHWK, typeProcess, ini) {
 	var stack = {};
+
+	var stacks = {}
 
 	var gimme;
 
 	var fileNames = {};
 
-	var typeProcess = {
-		CARD : CARD,
-		tBMP : tBMP
-	};
-
-	var cardFiles = ["BLST", "CARD", "FLST", "HSPT", "MLST", "PLST"];
+	var cardFiles = ["BLST", "CARD", "FLST", "HSPT", "MLST", "PLST", "SLST"];
 
 	function process(name, callback) {
 
-		stack[name] = {
-			cards : [],
-			resources : {}
-		};
+		stacks[name] = {};
 
 		function processType(type, data) {
-			if (cardFiles.indexOf(type) == -1) {
-				stack[name].resources[type] = [];
-			}
+			stacks[name][type] = [];
 			for (i in data) {
 				if (typeProcess[type]) {
 					var d = data[i].file;
 					scheduleProc(d, typeProcess[type], data[i]);
-					data[i].file = false;
 				}
-				if (cardFiles.indexOf(type) == -1) {
-					stack[name].resources[type][i] = data[i];
-				} else {
-					if (!stack[name].cards[i]) {
-						stack[name].cards[i] = {};
-					}
-					stack[name].cards[i][type] = data[i];
-				}
+				stacks[name][type][i] = data[i];
 			}
 		}
 
@@ -47,7 +31,7 @@ define(["engine/data/MHWK", "engine/data/CARD", "engine/data/tBMP", "engine/data
 				}
 			}
 
-			if (proc.length) {
+			if (proc.length&&stack.config.curLoad==0) {
 				return;
 			};
 
@@ -75,6 +59,8 @@ define(["engine/data/MHWK", "engine/data/CARD", "engine/data/tBMP", "engine/data
 			var d = proc.shift();
 			d.loc.file = d.func(d.data);
 
+			//console.log(d.loc);
+
 			if (proc.length == 0) {
 				clearInterval(procTimeout);
 				procTimeout = false;
@@ -96,6 +82,15 @@ define(["engine/data/MHWK", "engine/data/CARD", "engine/data/tBMP", "engine/data
 	}
 
 
+	stack.getRes = function(stackName, type, index) {
+		if (stacks[stackName][type][index].file instanceof DataView) {
+			if (typeProcess[type]) {
+				stacks[stackName][type][index].file = typeProcess[type](stacks[stackName][type][index].file);
+			}
+		}
+		return stacks[stackName][type][index];
+	};
+
 	stack.init = function(iniFile, g) {
 
 		gimme = g;
@@ -112,10 +107,19 @@ define(["engine/data/MHWK", "engine/data/CARD", "engine/data/tBMP", "engine/data
 	};
 
 	stack.load = function(name, callback) {
-		console.log(name, "loading")
-		for (f in fileNames[name]) {
-			gimme(f, process(name, callback));
+		if (stacks[name]) {
+			setTimeout(callback,1);
+		} else {
+			console.log(name, "loading");
+			for (f in fileNames[name]) {
+				gimme(f, process(name, callback));
+			}
 		}
+	};
+	
+	stack.config={
+		curLoad:1,
+		nextLoad:1
 	};
 
 	return stack;

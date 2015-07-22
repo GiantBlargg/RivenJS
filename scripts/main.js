@@ -6,14 +6,24 @@ require(["jquery", "engine", "engine/data/Binary", "dev/globalizer", "dev/dieass
 	var mainCanvas = $("#mainCanvas")[0];
 	var ctx = mainCanvas.getContext("2d");
 
-	var files = $("#files")[0].files;
+	var files = $("#files")[0];
 
+	var inited = false;
+
+	$("#full").click(function() {
+		mainCanvas.mozRequestFullScreen();
+	});
 	$("#GO").click(function() {
-		$("#upload").hide();
-		gimme("riven.cfg", true, function(name, data) {
-			engine.init(data, gimme);
-			engine.goStack($("#stack")[0].value,$("#card")[0].value);
-		});
+		//$("#upload").hide();
+		if (inited) {
+			engine.goStack($("#stack")[0].value, $("#card")[0].value);
+		} else {
+			gimme("riven.cfg", true, function(name, data) {
+				engine.init(data, gimme, ctx);
+				engine.goStack($("#stack")[0].value, $("#card")[0].value);
+			});
+			inited = true;
+		}
 	});
 	function gimme(name, text, callback) {
 
@@ -49,9 +59,9 @@ require(["jquery", "engine", "engine/data/Binary", "dev/globalizer", "dev/dieass
 	}
 
 	function findFile(name) {
-		for (f in files) {
-			if (files[f].name.toUpperCase() == name.toUpperCase()) {
-				return files[f];
+		for (f in files.files) {
+			if (files.files[f].name.toUpperCase() == name.toUpperCase()) {
+				return files.files[f];
 			}
 		}
 	}

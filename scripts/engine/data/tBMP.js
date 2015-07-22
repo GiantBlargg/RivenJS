@@ -1,6 +1,6 @@
 define(["engine/data/Binary", "engine/data/tBMP/None", "engine/data/tBMP/Riven"], function(Binary, None, Riven) {
 
-	// This emulates byte overflow similar to lower level languages
+	// This emulates byte overflow similar to lower level languages, so 256==0
 	function bound(array, min, max) {//Might be unnecessary but i'll leave it in for saftey
 
 		min = min || 0;
@@ -62,12 +62,12 @@ define(["engine/data/Binary", "engine/data/tBMP/None", "engine/data/tBMP/Riven"]
 			}
 		}
 
-		var decImg = bound(Secondary[comp2](bound(Primary[comp1](data.subs(imgOff), width, height, bytesRow), 0, 256), width, height, bytesRow), 0, 256);
+		var decImg = bound(Secondary[comp2](bound(Primary[comp1](data.subs(imgOff), width, height, bytesRow)), width, height, bytesRow));
 
 		var finalImg = [];
 
 		for (pixel in decImg) {
-			var colour =palette[decImg[pixel]];
+			var colour = palette[decImg[pixel]];
 			if (pixel % bytesRow < width) {
 				finalImg.push(colour.r, colour.g, colour.b, 255);
 			}
