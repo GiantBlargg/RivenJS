@@ -1,7 +1,7 @@
 define(["engine/data/MHWK", "engine/data/typeProcess", "engine/data/ini", "engine/data/Binary"], function(MHWK, typeProcess, ini) {
 	var stack = {};
 
-	var stacks = {}
+	var stacks = {};
 
 	var gimme;
 
@@ -31,7 +31,7 @@ define(["engine/data/MHWK", "engine/data/typeProcess", "engine/data/ini", "engin
 				}
 			}
 
-			if (proc.length&&stack.config.curLoad==0) {
+			if (proc.length && stack.config.curLoad == 0) {
 				return;
 			};
 
@@ -83,12 +83,16 @@ define(["engine/data/MHWK", "engine/data/typeProcess", "engine/data/ini", "engin
 
 
 	stack.getRes = function(stackName, type, index) {
-		if (stacks[stackName][type][index].file instanceof DataView) {
-			if (typeProcess[type]) {
-				stacks[stackName][type][index].file = typeProcess[type](stacks[stackName][type][index].file);
-			}
-		}
-		return stacks[stackName][type][index];
+		if (stacks[stackName])
+			if (stacks[stackName][type])
+				if (stacks[stackName][type][index]) {
+					if (stacks[stackName][type][index].file instanceof DataView)
+						if (typeProcess[type])
+							stacks[stackName][type][index].file = typeProcess[type](stacks[stackName][type][index].file.subs(0));
+
+					return stacks[stackName][type][index];
+				}
+		return false;
 	};
 
 	stack.init = function(iniFile, g) {
@@ -108,7 +112,7 @@ define(["engine/data/MHWK", "engine/data/typeProcess", "engine/data/ini", "engin
 
 	stack.load = function(name, callback) {
 		if (stacks[name]) {
-			setTimeout(callback,1);
+			setTimeout(callback, 1);
 		} else {
 			console.log(name, "loading");
 			for (f in fileNames[name]) {
@@ -116,10 +120,10 @@ define(["engine/data/MHWK", "engine/data/typeProcess", "engine/data/ini", "engin
 			}
 		}
 	};
-	
-	stack.config={
-		curLoad:1,
-		nextLoad:1
+
+	stack.config = {
+		curLoad : 1,
+		nextLoad : 1
 	};
 
 	return stack;

@@ -44,8 +44,8 @@ define(["engine/stack", "engine/data/tBMP"], function(stack, tBMP) {
 		}
 	}
 
-	function No() {
-		console.warn("Not Implemented", arguments);
+	function No(args, cmd) {
+		console.warn("Not Implemented", cmd, args);
 		//throw new Error("Not Implemented", arguments);
 	}
 
@@ -66,7 +66,7 @@ define(["engine/stack", "engine/data/tBMP"], function(stack, tBMP) {
 
 	function runScript(cmds) {
 		for (c in cmds) {
-			cmd[cmds[c].cmd](cmds[c].args);
+			cmd[cmds[c].cmd](cmds[c].args, cmds[c].cmd);
 		}
 	}
 
