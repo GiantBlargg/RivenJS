@@ -64,7 +64,9 @@ define(["engine/data/MHWK", "engine/data/typeProcess", "engine/data/ini", "engin
 			if (proc.length == 0) {
 				clearInterval(procTimeout);
 				procTimeout = false;
-				done();
+				if (stack.config.curLoad == 0) {
+					done();
+				}
 			}
 		}
 
