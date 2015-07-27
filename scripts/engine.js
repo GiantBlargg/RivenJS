@@ -7,8 +7,8 @@ define(["engine/stack", "engine/data/tBMP"], function(stack, tBMP) {
 	    buffer;
 
 	var ctx;
-
-	var gameVars = [];
+	var gameVars = {};
+	window.gv = gameVars;
 
 	var activeHot = {};
 
@@ -22,6 +22,7 @@ define(["engine/stack", "engine/data/tBMP"], function(stack, tBMP) {
 	}
 
 	function goStack(newStack, card) {
+		console.log("Going to", newStack, card);
 		stack.load(newStack, function() {
 			console.assert(newStack && card);
 			if (curStack && curCard)
@@ -61,18 +62,34 @@ define(["engine/stack", "engine/data/tBMP"], function(stack, tBMP) {
 	var cmd = [undefined, No,
 	function(args) {
 		go(args[0]);
-	}, No, No, No, No, No,
+	}, No, No, No, No,
+	function(args) {//7 set variable value
+		console.log(args);
+		gameVars[stack.getRes(curStack,"NAME",4).file[args[0]]] = args[1];
+	},
 	function(args) {//8 conditional branch
-		if (args[args.variable]) {
-			runScript(args[args.variable]);
+		//console.log(args);
+		var v = getVar(stack.getRes(curStack,"NAME",4).file[args.variable]);
+		if (args[v]) {
+			runScript(args[v]);
 		} else if (args[65535]) {
 			runScript(args[65535]);
 		}
-	}, No, No, No, No, No, No, No, No, No, No, No, No, No, No, No, No, No, No, No, No, No, No, No, No, No, No, No, No, No, No,
+	}, No, No, No, No, No, No, No, No,
+	function(args) {//17 call external command
+		console.log(stack.getRes(curStack,"NAME",3).file[args[0]],args);
+	}, No,
+	function(args) {//19 reload card
+		go(curCard);
+	}, No, No, No, No, No, No, No, No, No, No, No, No, No, No, No, No, No, No, No,
 	function(args) {//39 activate PLST record
 		var bitmap = stack.getRes(curStack,"PLST",curCard).file[args[0]];
 		drawBMP(bitmap.id, bitmap.left, bitmap.top, bitmap.right, bitmap.bottom);
-	}, No, No, No, No, No, No, No];
+	}, No, No, No,
+	function(args) {//43 activate BLST record
+		var BLST = stack.getRes(curStack,"BLST",curCard).file[args[0]];
+		activeHot[BLST.hotspot_id] = BLST.enable;
+	}, No, No, No];
 
 	console.log(cmd);
 
@@ -108,6 +125,7 @@ define(["engine/stack", "engine/data/tBMP"], function(stack, tBMP) {
 		goStack : goStack,
 		go : go,
 		mouseMove : function(x, y) {
+			event(4, checkHotspot(x, y).script);
 		},
 		mouseDown : function(x, y) {
 			event(0, checkHotspot(x, y).script);

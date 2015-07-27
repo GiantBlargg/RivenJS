@@ -14,12 +14,13 @@ define(["engine/data/MHWK", "engine/data/typeProcess", "engine/data/ini", "engin
 		stacks[name] = {};
 
 		function processType(type, data) {
-			stacks[name][type] = [];
+			stacks[name][type] = stacks[name][type] || [];
 			for (i in data) {
-				if (typeProcess[type]) {
-					var d = data[i].file;
-					scheduleProc(d, typeProcess[type], data[i]);
-				}
+				if (stack.config.curLoad != 2)
+					if (typeProcess[type]) {
+						var d = data[i].file;
+						scheduleProc(d, typeProcess[type], data[i]);
+					}
 				stacks[name][type][i] = data[i];
 			}
 		}
@@ -36,6 +37,7 @@ define(["engine/data/MHWK", "engine/data/typeProcess", "engine/data/ini", "engin
 			};
 
 			console.log(name, "loaded");
+			console.log(stacks[name]);
 			if (callback)
 				callback();
 		}
@@ -124,7 +126,7 @@ define(["engine/data/MHWK", "engine/data/typeProcess", "engine/data/ini", "engin
 	};
 
 	stack.config = {
-		curLoad : 1,
+		curLoad : 2,
 		nextLoad : 1
 	};
 
