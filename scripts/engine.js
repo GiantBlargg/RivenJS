@@ -1,4 +1,4 @@
-define(["engine/stack", "engine/data/tBMP"], function(stack, tBMP) {
+define(["engine/stack"], function(stack) {
 
 	var curStack;
 	var curCard;
@@ -101,16 +101,6 @@ define(["engine/stack", "engine/data/tBMP"], function(stack, tBMP) {
 		for (c in cmds) {
 			cmd[cmds[c].cmd](cmds[c].args, cmds[c].cmd);
 		}
-	}
-
-	function drawBMP(id, left, top, right, bottom) {
-		addPLST({
-			id : id,
-			left : left,
-			top : top,
-			right : right,
-			bottom : bottom
-		});
 	}
 
 	function addPLST(plst) {
