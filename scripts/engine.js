@@ -36,14 +36,19 @@ define(["engine/stack", "engine/data/tBMP"], function(stack, tBMP) {
 					activeHot[stack.getRes(curStack,"HSPT",curCard).file[i].blst_id] = true;
 				}
 			}
-			var bitmap = stack.getRes(curStack,"PLST",curCard).file[1];
-			drawBMP(bitmap.id, bitmap.left, bitmap.top, bitmap.right, bitmap.bottom);
+			addPLST(stack.getRes(curStack,"PLST",curCard).file[1]);
 			event(6, stack.getRes(curStack, "CARD", curCard).file.script);
 			scheduleUpdate();
 		});
 	}
 
+	var plsts = [];
+
 	function scheduleUpdate() {
+		for (p in plsts) {
+			var plst = plsts[p];
+			buffer.putImageData(stack.getRes(curStack, "tBMP", plst.id).file, plst.left, plst.top, 0, 0, plst.right - plst.left, plst.bottom - plst.top);
+		}
 		ctx.drawImage(b, 0, 0);
 	}
 
@@ -77,14 +82,13 @@ define(["engine/stack", "engine/data/tBMP"], function(stack, tBMP) {
 		}
 	}, No, No, No, No, No, No, No, No,
 	function(args) {//17 call external command
-		console.log(stack.getRes(curStack,"NAME",3).file[args[0]],args);
+		console.log(stack.getRes(curStack,"NAME",3).file[args[0]], args);
 	}, No,
 	function(args) {//19 reload card
 		go(curCard);
 	}, No, No, No, No, No, No, No, No, No, No, No, No, No, No, No, No, No, No, No,
 	function(args) {//39 activate PLST record
-		var bitmap = stack.getRes(curStack,"PLST",curCard).file[args[0]];
-		drawBMP(bitmap.id, bitmap.left, bitmap.top, bitmap.right, bitmap.bottom);
+		addPLST(stack.getRes(curStack,"PLST",curCard).file[args[0]]);
 	}, No, No, No,
 	function(args) {//43 activate BLST record
 		var BLST = stack.getRes(curStack,"BLST",curCard).file[args[0]];
@@ -100,7 +104,17 @@ define(["engine/stack", "engine/data/tBMP"], function(stack, tBMP) {
 	}
 
 	function drawBMP(id, left, top, right, bottom) {
-		buffer.putImageData(stack.getRes(curStack, "tBMP", id).file, left, top, 0, 0, right - left, bottom - top);
+		addPLST({
+			id : id,
+			left : left,
+			top : top,
+			right : right,
+			bottom : bottom
+		});
+	}
+
+	function addPLST(plst) {
+		plsts.push(plst);
 	}
 
 	function checkHotspot(x, y) {
