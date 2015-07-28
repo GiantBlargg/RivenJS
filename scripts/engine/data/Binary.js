@@ -15,7 +15,7 @@ define(function() {
 			byteLength = end - byteOffset;
 		}
 
-		return new DataView(this.buffer, byteOffset, byteLength);
+		return new DataView(this.buffer.slice(byteOffset, byteOffset + byteLength));
 
 	};
 
@@ -52,6 +52,10 @@ define(function() {
 	DataView.prototype.getSShort = function() {
 		this.pos += 2;
 		return this.getInt16(this.pos - 2);
+	};
+	DataView.prototype.getLong = function() {
+		this.pos += 4;
+		return this.getUint32(this.pos - 4);
 	};
 
 	return DataView;

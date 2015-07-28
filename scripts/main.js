@@ -1,6 +1,5 @@
 require(["jquery", "engine", "engine/data/Binary", "dev/globalizer", "dev/dieassert"], function($, engine) {
 
-	globalize("engine");
 	$.noConflict('true');
 
 	var mainCanvas = $("#mainCanvas")[0];
