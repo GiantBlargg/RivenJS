@@ -37,7 +37,7 @@ define(["engine/data/MHWK", "engine/data/typeProcess", "engine/data/ini", "engin
 			};
 
 			console.log(name, "loaded");
-			console.log(stacks[name]);
+			//console.log(stacks[name]);
 			if (callback)
 				callback();
 		}

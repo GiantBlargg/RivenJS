@@ -1,6 +1,7 @@
 require(["jquery", "engine", "engine/data/Binary", "dev/globalizer", "dev/dieassert"], function($, engine) {
 
 	$.noConflict('true');
+	console.assert.useDebugger = true;
 
 	var mainCanvas = $("#mainCanvas")[0];
 	var ctx = mainCanvas.getContext("2d");
