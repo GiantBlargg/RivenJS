@@ -38,7 +38,7 @@ define(["engine/stack", "engine/scriptEngine"], function(stack, scriptEngine) {
 			var RMAP = stack.getRes(newStack, "RMAP", 1).file;
 			var card;
 			for (i in RMAP) {
-				if (RMAP[i]==id){
+				if (RMAP[i] == id) {
 					card = i;
 				}
 			}
@@ -109,13 +109,25 @@ define(["engine/stack", "engine/scriptEngine"], function(stack, scriptEngine) {
 		goStack : goStack,
 		go : go,
 		mouseMove : function(x, y) {
-			script.event(4, checkHotspot(x, y).script);
+			try {
+				script.event(4, checkHotspot(x, y).script);
+			} catch(e) {
+				//If there is no hotspot do nothing
+			}
 		},
 		mouseDown : function(x, y) {
-			script.event(0, checkHotspot(x, y).script);
+			try {
+				script.event(0, checkHotspot(x, y).script);
+			} catch(e) {
+				//If there is no hotspot do nothing
+			}
 		},
 		mouseUp : function(x, y) {
-			script.event(2, checkHotspot(x, y).script);
+			try {
+				script.event(2, checkHotspot(x, y).script);
+			} catch(e) {
+				//If there is no hotspot do nothing
+			}
 		}
 	};
 	return engine;

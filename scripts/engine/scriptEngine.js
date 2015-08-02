@@ -18,7 +18,7 @@ define(["engine/stack"], function(stack) {
 				handled = true;
 			}
 		}
-		if (!handled) {
+		if (!handled && callback) {
 			callback();
 		}
 	};
@@ -88,8 +88,8 @@ define(["engine/stack"], function(stack) {
 	, No//21 enable screen update
 	, undefined, undefined, No//24 enable screen update
 	, undefined, undefined,
-	function(args,next) {//27 go to stack
-		this.engineItrfc.goCyan(stack.getRes(this.engineItrfc.curCard.stack,"NAME",5).file[args[0]],(args[1]<<16)+args[2],next);
+	function(args, next) {//27 go to stack
+		this.engineItrfc.goCyan(stack.getRes(this.engineItrfc.curCard.stack,"NAME",5).file[args[0]], (args[1] << 16) + args[2], next);
 	}, No//28
 	, No//29
 	, undefined, No//31
