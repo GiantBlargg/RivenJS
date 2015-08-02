@@ -18,7 +18,7 @@ define(["engine/data/CARD", "engine/data/HSPT", "engine/data/PLST", "engine/data
 			var names = [];
 			var stringsOff = fieldcount * 4 + 2;
 			for (var i = 0; i < fieldcount; i++) {
-				names[i] = data.getChars(data.getShort()+stringsOff);
+				names[i] = data.getChars(data.getShort() + stringsOff);
 			}
 			return names;
 		},
@@ -35,6 +35,14 @@ define(["engine/data/CARD", "engine/data/HSPT", "engine/data/PLST", "engine/data
 				};
 			}
 			return bitmaps;
+		},
+		RMAP : function(data) {
+			var numCards = data.getUint32(0);
+			var res = [];
+			for (var i = 1; i <= numCards; i++) {
+				res[i] = data.getUint32(4 * i);
+			}
+			return res;
 		},
 		tBMP : tBMP
 	};

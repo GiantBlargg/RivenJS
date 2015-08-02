@@ -1,6 +1,7 @@
 require(["jquery", "engine", "engine/data/Binary", "dev/globalizer", "dev/dieassert"], function($, engine) {
 
 	$.noConflict('true');
+	console.assert.useDebugger = true;
 
 	var mainCanvas = $("#mainCanvas")[0];
 	var ctx = mainCanvas.getContext("2d");
@@ -27,6 +28,10 @@ require(["jquery", "engine", "engine/data/Binary", "dev/globalizer", "dev/dieass
 	mainCanvas.onmousedown = function(e) {
 		var rect = e.target.getBoundingClientRect();
 		engine.mouseDown(e.clientX - rect.left, e.clientY - rect.top);
+	};
+	mainCanvas.onmouseup = function(e) {
+		var rect = e.target.getBoundingClientRect();
+		engine.mouseUp(e.clientX - rect.left, e.clientY - rect.top);
 	};
 	function gimme(name, text, callback) {
 
