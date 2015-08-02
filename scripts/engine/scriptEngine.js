@@ -82,7 +82,7 @@ define(["engine/stack"], function(stack) {
 	}, No//18 transition
 	,
 	function(args, next) {//19 reload card
-		this.engineItrfc.go(this.engineItrfc.curCard);
+		this.engineItrfc.go(this.engineItrfc.curCard.card);
 		next();
 	}, No//20 disable screen update
 	, No//21 enable screen update
@@ -107,8 +107,8 @@ define(["engine/stack"], function(stack) {
 	, No//41
 	, undefined,
 	function(args, next) {//43 activate BLST record
-		var BLST = stack.getRes(this.engineItrfc.curCard.stack,"BLST",this.engineItrfc.curCard).file[args[0]];
-		activeHot[BLST.hotspot_id] = BLST.enable;
+		var BLST = stack.getRes(this.engineItrfc.curCard.stack,"BLST",this.engineItrfc.curCard.card).file[args[0]];
+		this.engineItrfc.activeHot[BLST.hotspot_id] = BLST.enable;
 		next();
 	}, No//44 activate FLST record
 	, No//45 do zip mode
