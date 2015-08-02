@@ -73,6 +73,8 @@ define(["engine/data/MHWK", "engine/data/typeProcess", "engine/data/ini", "engin
 		}
 
 		return function(n, data) {
+			
+			console.log("processing",n);
 
 			var res = MHWK(data);
 
