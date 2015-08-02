@@ -112,21 +112,27 @@ define(["engine/stack", "engine/scriptEngine"], function(stack, scriptEngine) {
 			try {
 				script.event(4, checkHotspot(x, y).script);
 			} catch(e) {
-				//If there is no hotspot do nothing
+				if (e.message != "checkHotspot(...) is undefined") {
+					throw e;
+				}
 			}
 		},
 		mouseDown : function(x, y) {
 			try {
 				script.event(0, checkHotspot(x, y).script);
 			} catch(e) {
-				//If there is no hotspot do nothing
+				if (e.message != "checkHotspot(...) is undefined") {
+					throw e;
+				}
 			}
 		},
 		mouseUp : function(x, y) {
 			try {
 				script.event(2, checkHotspot(x, y).script);
 			} catch(e) {
-				//If there is no hotspot do nothing
+				if (e.message != "checkHotspot(...) is undefined") {
+					throw e;
+				}
 			}
 		}
 	};
