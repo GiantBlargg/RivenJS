@@ -87,8 +87,10 @@ define(["engine/stack"], function(stack) {
 	}, No//20 disable screen update
 	, No//21 enable screen update
 	, undefined, undefined, No//24 enable screen update
-	, undefined, undefined, No//27 go to stack
-	, No//28
+	, undefined, undefined,
+	function(args,next) {//27 go to stack
+		this.engineItrfc.goCyan(stack.getRes(this.engineItrfc.curCard.stack,"NAME",5).file[args[0]],(args[1]<<16)+args[2],next);
+	}, No//28
 	, No//29
 	, undefined, No//31
 	, No//32 play foreground movie

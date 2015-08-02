@@ -24,12 +24,30 @@ define(["engine/stack", "engine/scriptEngine"], function(stack, scriptEngine) {
 		scheduleUpdate : scheduleUpdate,
 		plsts : plsts,
 		curCard : curCard,
+		goCyan : goCyan,
 	};
 
 	var script = new scriptEngine(scriptItrfc);
 
 	function go(card, callback) {
 		goStack(curCard.stack, card, callback);
+	}
+
+	function goCyan(newStack, id, callback) {
+		stack.load(newStack, function() {
+			var RMAP = stack.getRes(newStack, "RMAP", 1).file;
+			var card;
+			for (i in RMAP) {
+				if (RMAP[i]==id){
+					card = i;
+				}
+			}
+			if (card) {
+				goStack(newStack, card, callback);
+			} else {
+				console.log("WRONG!");
+			}
+		});
 	}
 
 	function goStack(newStack, card, callback) {
