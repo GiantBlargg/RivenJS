@@ -4,7 +4,7 @@
  * The original can be found at https://github.com/scummvm/scummvm/blob/master/engines/mohawk/bitmap.cpp
  *
  * Until this section is rewritten to not use this code, this file will be licensed seperatly from the rest of this project under the GPL-2.0.
- * 
+ *
  * Please don't sue me!
  */
 
@@ -14,35 +14,15 @@ define(["engine/data/Binary"], function(Binary) {
 		data.setPos(4);
 
 		var decImg = [];
+
+		var subcommand = 0;
+
 		//TODO rewrite to plagerise less
 		while (decImg.length < bytesRow * height) {
-			//drawImg();
 			var cmd = data.getByte();
-			if (cmd == 0) {// End of stream
-				break;
-			} else if (cmd >= 1 && cmd <= 63) {// Simple Pixel Duplet Output
-				for (var i = 0; i < cmd; i++) {
-					decImg.push(data.getByte(), data.getByte());
-				}
-			} else if (cmd >= 64 && cmd <= 127) {// Simple Repetition of last 2 pixels (cmd - 0x40) times
-				var pixels = [decImg[decImg.length - 2], decImg[decImg.length - 1]];
-				for (var i = 0; i < (cmd - 0x40); i++) {
-					decImg.push(pixels[0], pixels[1]);
-				}
-			} else if (cmd >= 128 && cmd <= 191) {// Simple Repetition of last 4 pixels (cmd - 0x80) times
-				var pixels = [decImg[decImg.length - 4], decImg[decImg.length - 3], decImg[decImg.length - 2], decImg[decImg.length - 1]];
-				for (var i = 0; i < (cmd - 0x80); i++) {
-					decImg.push(pixels[0], pixels[1], pixels[2], pixels[3]);
-				}
-			} else {//Subcommand
-				_subCommand(cmd - 192);
-			}
-		}
 
-		function _subCommand(count) {
-			for (var i = 0; i < count; i++) {
-				//drawImg();
-				var cmd = data.getByte();
+			if (subcommand) {
+				subcommand--;
 				var m = cmd & 15;
 
 				//Arithmetic
@@ -162,7 +142,29 @@ define(["engine/data/Binary"], function(Binary) {
 						B_PIXEL_MINUS(m1);
 					}
 				}
+			} else {
+
+				if (cmd == 0x00) {// End of stream
+					break;
+				} else if (cmd >= 0x01 && cmd <= 0x3f) {// Simple Pixel Duplet Output
+					for (var i = 0; i < cmd; i++) {
+						decImg.push(data.getByte(), data.getByte());
+					}
+				} else if (cmd >= 0x40 && cmd <= 0x7f) {// Simple Repetition of last 2 pixels (cmd - 0x40) times
+					var pixels = [decImg[decImg.length - 2], decImg[decImg.length - 1]];
+					for (var i = 0; i < (cmd - 0x40); i++) {
+						decImg.push(pixels[0], pixels[1]);
+					}
+				} else if (cmd >= 0x80 && cmd <= 0xbf) {// Simple Repetition of last 4 pixels (cmd - 0x80) times
+					var pixels = [decImg[decImg.length - 4], decImg[decImg.length - 3], decImg[decImg.length - 2], decImg[decImg.length - 1]];
+					for (var i = 0; i < (cmd - 0x80); i++) {
+						decImg.push(pixels[0], pixels[1], pixels[2], pixels[3]);
+					}
+				} else {//Subcommand
+					subcommand=cmd - 192;
+				}
 			}
+
 		}
 
 		function B_BYTE() {
