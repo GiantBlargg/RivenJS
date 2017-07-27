@@ -1,4 +1,4 @@
-require(["./jquery", "./engine", "./engine/data/Binary", "./dev/dieassert"], function ($, engine) {
+require(["jquery", "./engine", "./engine/data/Binary", "./dev/dieassert"], function ($, engine) {
 
 	$.noConflict('true');
 	console.assert.useDebugger = true;
