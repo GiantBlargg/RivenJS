@@ -1,4 +1,4 @@
-require(["jquery", "engine", "engine/data/Binary", "dev/globalizer", "dev/dieassert"], function($, engine) {
+require(["./jquery", "./engine", "./engine/data/Binary", "./dev/dieassert"], function ($, engine) {
 
 	$.noConflict('true');
 	console.assert.useDebugger = true;
@@ -10,26 +10,26 @@ require(["jquery", "engine", "engine/data/Binary", "dev/globalizer", "dev/dieass
 
 	var inited = false;
 
-	$("#full").click(function() {
+	$("#full").click(function () {
 		mainCanvas.mozRequestFullScreen();
 	});
-	$("#GO").click(function() {
+	$("#GO").click(function () {
 		//$("#upload").hide();
 		if (inited) {
 			engine.goStack($("#stack")[0].value, $("#card")[0].value);
 		} else {
-			gimme("riven.cfg", true, function(name, data) {
+			gimme("riven.cfg", true, function (name, data) {
 				engine.init(data, gimme, ctx);
 				engine.goStack($("#stack")[0].value, $("#card")[0].value);
 			});
 			inited = true;
 		}
 	});
-	mainCanvas.onmousedown = function(e) {
+	mainCanvas.onmousedown = function (e) {
 		var rect = e.target.getBoundingClientRect();
 		engine.mouseDown(e.clientX - rect.left, e.clientY - rect.top);
 	};
-	mainCanvas.onmouseup = function(e) {
+	mainCanvas.onmouseup = function (e) {
 		var rect = e.target.getBoundingClientRect();
 		engine.mouseUp(e.clientX - rect.left, e.clientY - rect.top);
 	};
@@ -37,7 +37,7 @@ require(["jquery", "engine", "engine/data/Binary", "dev/globalizer", "dev/dieass
 
 		console.log(name);
 
-		if ( typeof name == "string") {
+		if (typeof name == "string") {
 			if (!callback) {
 				callback = text;
 				text = false;
@@ -47,13 +47,13 @@ require(["jquery", "engine", "engine/data/Binary", "dev/globalizer", "dev/dieass
 			if (text) {
 				reader.readAsText(findFile(name));
 
-				reader.onloadend = function() {
+				reader.onloadend = function () {
 					callback(name, reader.result);
 				};
 			} else {
 				reader.readAsArrayBuffer(findFile(name));
 
-				reader.onloadend = function() {
+				reader.onloadend = function () {
 					callback(name, new DataView(reader.result));
 				};
 			}

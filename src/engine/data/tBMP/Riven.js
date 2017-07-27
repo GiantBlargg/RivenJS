@@ -8,8 +8,8 @@
  * Please don't sue me!
  */
 
-define(["engine/data/Binary"], function(Binary) {
-	return function(data, width, height, bytesRow) {
+define(["../Binary"], function (Binary) {
+	return function (data, width, height, bytesRow) {
 
 		data.setPos(4);
 
@@ -161,7 +161,7 @@ define(["engine/data/Binary"], function(Binary) {
 						decImg.push(pixels[0], pixels[1], pixels[2], pixels[3]);
 					}
 				} else {//Subcommand
-					subcommand=cmd - 192;
+					subcommand = cmd - 192;
 				}
 			}
 
@@ -172,7 +172,7 @@ define(["engine/data/Binary"], function(Binary) {
 		}
 
 		function _lastduplet(m) {
-			m=m||0;
+			m = m || 0;
 			decImg.push(decImg[decImg.length - 2] + m);
 		}
 

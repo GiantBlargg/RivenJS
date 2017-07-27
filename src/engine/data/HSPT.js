@@ -1,15 +1,15 @@
-define(["engine/data/scripts", "engine/data/Binary"], function(scripts) {
-	return function(data) {
+define(["./scripts", "./Binary"], function (scripts) {
+	return function (data) {
 		var hotspots = [];
 		var numHot = data.getShort();
 		for (var i = 0; i < numHot; i++) {
 			var hotspot = {
-				blst_id : data.getShort(),
-				name : data.getSShort(),
-				left : data.getSShort(),
-				top : data.getSShort(),
-				right : data.getSShort(),
-				bottom : data.getSShort()
+				blst_id: data.getShort(),
+				name: data.getSShort(),
+				left: data.getSShort(),
+				top: data.getSShort(),
+				right: data.getSShort(),
+				bottom: data.getSShort()
 			};
 			data.pos += 2;
 			hotspot.cursor = data.getShort();

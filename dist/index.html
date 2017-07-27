@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 	<head>
 		<meta charset="utf-8" />
 
@@ -10,6 +11,7 @@
 				background-color: #000;
 				overflow: hidden;
 			}
+
 			#upload {
 				background: white;
 				border-radius: 1em;
@@ -17,18 +19,20 @@
 			}
 		</style>
 	</head>
+
 	<body>
 		<div id="upload">
 			<input id="files" type="file" multiple />
 			<input id="stack" type="text" value="aspit" />
-			<input id="card" type="number" value="1"/>
+			<input id="card" type="number" value="1" />
 			<input id="GO" type="button" value="GO!" />
-			<input id="full" type="button" value="Fullscreen"/>
+			<input id="full" type="button" value="Fullscreen" />
 		</div>
 		<div class="container">
 			<canvas width="608" height="392" id="mainCanvas"></canvas>
 		</div>
 	</body>
 
-	<script src="scripts/require.js" data-main="scripts/main"></script>
+	<script src="bundle.js"></script>
+
 </html>

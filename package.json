@@ -1,0 +1,24 @@
+{
+  "name": "rivenjs",
+  "version": "0.0.0",
+  "description": "An attempt to recreate Riven: The Sequel to Myst in a web browser. Requires the data from Riven at runtime.",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack-dev-server",
+    "build": "webpack -p"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GiantBlargg/RivenJS.git"
+  },
+  "author": "GiantBlargg",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/GiantBlargg/RivenJS/issues"
+  },
+  "homepage": "https://github.com/GiantBlargg/RivenJS#readme",
+  "dependencies": {
+    "webpack": "^3.4.1",
+    "webpack-dev-server": "^2.6.1"
+  }
+}

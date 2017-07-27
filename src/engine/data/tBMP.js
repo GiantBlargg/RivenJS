@@ -1,4 +1,4 @@
-define(["engine/data/Binary", "engine/data/tBMP/None", "engine/data/tBMP/Riven"], function(Binary, None, Riven) {
+define(["./Binary", "./tBMP/None", "./tBMP/Riven"], function (Binary, None, Riven) {
 
 	// This emulates byte overflow similar to lower level languages, so 256==0
 	function bound(array, min, max) {//Might be unnecessary but i'll leave it in for saftey
@@ -26,11 +26,11 @@ define(["engine/data/Binary", "engine/data/tBMP/None", "engine/data/tBMP/Riven"]
 	var Primary = [None, No, No, undefined, Riven];
 
 	var Secondary = [
-	function(d) {
-		return d;
-	}, No, undefined, No];
+		function (d) {
+			return d;
+		}, No, undefined, No];
 
-	return function(data) {
+	return function (data) {
 
 		var width = data.getUint16(0);
 		var height = data.getUint16(2);
@@ -55,9 +55,9 @@ define(["engine/data/Binary", "engine/data/tBMP/None", "engine/data/tBMP/Riven"]
 			for (var i = 0; i < numColours; i++) {
 				var offset = 12 + i * bitPCol / 8;
 				palette[i] = {
-					r : data.getUint8(offset + 2),
-					g : data.getUint8(offset + 1),
-					b : data.getUint8(offset)
+					r: data.getUint8(offset + 2),
+					g: data.getUint8(offset + 1),
+					b: data.getUint8(offset)
 				};
 			}
 		}

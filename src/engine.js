@@ -1,12 +1,12 @@
-define(["engine/stack", "engine/scriptEngine"], function(stack, scriptEngine) {
+define(["./engine/stack", "./engine/scriptEngine"], function (stack, scriptEngine) {
 
 	var curCard = {
-		stack : null,
-		card : null
+		stack: null,
+		card: null
 	};
 
 	var b,
-	    buffer;
+		buffer;
 
 	var ctx;
 
@@ -17,14 +17,14 @@ define(["engine/stack", "engine/scriptEngine"], function(stack, scriptEngine) {
 	var plsts = [];
 
 	var scriptItrfc = {
-		gameVars : gameVars,
-		activeHot : activeHot,
-		go : go,
-		goStack : goStack,
-		scheduleUpdate : scheduleUpdate,
-		plsts : plsts,
-		curCard : curCard,
-		goCyan : goCyan,
+		gameVars: gameVars,
+		activeHot: activeHot,
+		go: go,
+		goStack: goStack,
+		scheduleUpdate: scheduleUpdate,
+		plsts: plsts,
+		curCard: curCard,
+		goCyan: goCyan,
 	};
 
 	var script = new scriptEngine(scriptItrfc);
@@ -34,7 +34,7 @@ define(["engine/stack", "engine/scriptEngine"], function(stack, scriptEngine) {
 	}
 
 	function goCyan(newStack, id, callback) {
-		stack.load(newStack, function() {
+		stack.load(newStack, function () {
 			var RMAP = stack.getRes(newStack, "RMAP", 1).file;
 			var card;
 			for (i in RMAP) {
@@ -53,7 +53,7 @@ define(["engine/stack", "engine/scriptEngine"], function(stack, scriptEngine) {
 	function goStack(newStack, card, callback) {
 		console.assert(newStack && card);
 		console.log("Going to", newStack, card);
-		stack.load(newStack, function() {
+		stack.load(newStack, function () {
 			if (curCard.stack && curCard.card) {
 				script.event(7, stack.getRes(curCard.stack, "CARD", curCard.card).file.script, postEvent7);
 			} else {
@@ -67,13 +67,13 @@ define(["engine/stack", "engine/scriptEngine"], function(stack, scriptEngine) {
 			curCard.card = card;
 			plsts.length = 0;
 			for (i in stack.getRes(curCard.stack, "HSPT", curCard.card).file) {
-				if (stack.getRes(curCard.stack,"HSPT",curCard.card).file[i].zip) {
-					activeHot[stack.getRes(curCard.stack,"HSPT",curCard.card).file[i].blst_id] = false;
+				if (stack.getRes(curCard.stack, "HSPT", curCard.card).file[i].zip) {
+					activeHot[stack.getRes(curCard.stack, "HSPT", curCard.card).file[i].blst_id] = false;
 				} else {
-					activeHot[stack.getRes(curCard.stack,"HSPT",curCard.card).file[i].blst_id] = true;
+					activeHot[stack.getRes(curCard.stack, "HSPT", curCard.card).file[i].blst_id] = true;
 				}
 			}
-			plsts.push(stack.getRes(curCard.stack,"PLST",curCard.card).file[1]);
+			plsts.push(stack.getRes(curCard.stack, "PLST", curCard.card).file[1]);
 			script.event(6, stack.getRes(curCard.stack, "CARD", curCard.card).file.script, scheduleUpdate);
 		}
 
@@ -98,7 +98,7 @@ define(["engine/stack", "engine/scriptEngine"], function(stack, scriptEngine) {
 	}
 
 	var engine = {
-		init : function(ini, gimme, c) {
+		init: function (ini, gimme, c) {
 			ctx = c;
 			b = document.createElement('canvas');
 			b.width = ctx.canvas.width;
@@ -106,30 +106,30 @@ define(["engine/stack", "engine/scriptEngine"], function(stack, scriptEngine) {
 			buffer = b.getContext("2d");
 			stack.init(ini, gimme);
 		},
-		goStack : goStack,
-		go : go,
-		mouseMove : function(x, y) {
+		goStack: goStack,
+		go: go,
+		mouseMove: function (x, y) {
 			try {
 				script.event(4, checkHotspot(x, y).script);
-			} catch(e) {
+			} catch (e) {
 				if (e.message != "checkHotspot(...) is undefined") {
 					throw e;
 				}
 			}
 		},
-		mouseDown : function(x, y) {
+		mouseDown: function (x, y) {
 			try {
 				script.event(0, checkHotspot(x, y).script);
-			} catch(e) {
+			} catch (e) {
 				if (e.message != "checkHotspot(...) is undefined") {
 					throw e;
 				}
 			}
 		},
-		mouseUp : function(x, y) {
+		mouseUp: function (x, y) {
 			try {
 				script.event(2, checkHotspot(x, y).script);
-			} catch(e) {
+			} catch (e) {
 				if (e.message != "checkHotspot(...) is undefined") {
 					throw e;
 				}

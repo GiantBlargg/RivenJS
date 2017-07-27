@@ -1,5 +1,5 @@
-define(["engine/data/Binary"],function(Binary) {
-	return function(data) {
+define(["./Binary"], function (Binary) {
+	return function (data) {
 		//TODO add proper errors
 		//sanity checks
 		console.assert(data.getChars(0, 4) == "MHWK");
@@ -20,7 +20,7 @@ define(["engine/data/Binary"],function(Binary) {
 
 		for (var i = 0; i < numFiles; i++) {
 			var offset = fileTabOff + 4 + i * 10;
-			files[i + 1] = data.subs( data.getUint32(offset), data.getUint16(offset + 4) + data.getUint8(offset + 6) * 65536);
+			files[i + 1] = data.subs(data.getUint32(offset), data.getUint16(offset + 4) + data.getUint8(offset + 6) * 65536);
 		}
 
 		//resource dir
@@ -39,9 +39,9 @@ define(["engine/data/Binary"],function(Binary) {
 				var off = resOff + 2 + o * 4;
 				var index = data.getUint16(off + 2);
 				res[data.getUint16(off)] = {
-					id : data.getUint16(off),
-					index : index,
-					file : files[index]
+					id: data.getUint16(off),
+					index: index,
+					file: files[index]
 				};
 			}
 
