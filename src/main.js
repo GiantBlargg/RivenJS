@@ -67,7 +67,7 @@ require(["jquery", "./engine", "./engine/data/Binary", "./dev/dieassert"], funct
 	}
 
 	function findFile(name) {
-		for (f in files.files) {
+		for (var f in files.files) {
 			if (files.files[f].name.toUpperCase() == name.toUpperCase()) {
 				return files.files[f];
 			}
