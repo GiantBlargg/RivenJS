@@ -76,5 +76,6 @@ function findFile(name) {
 			return files.files[f];
 		}
 	}
+	throw new Error("Couldn't find file: " + name);
 }
 

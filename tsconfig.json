@@ -5,12 +5,12 @@
 			"es2015",
 			"dom"
 		],
-		"strict": false,
+		"strict": true,
 		"noImplicitAny": false,
 		"strictNullChecks": false,
 		"noImplicitThis": false,
-		"alwaysStrict": false,
+		"alwaysStrict": true,
 		"noUnusedLocals": false,
-		"noImplicitReturns": false
+		"noImplicitReturns": true
 	}
 }
