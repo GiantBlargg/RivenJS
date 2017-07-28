@@ -8,7 +8,7 @@
  * Please don't sue me!
  */
 
-import Binary from "../Binary";
+import "../Binary";
 export default function (data, width, height, bytesRow) {
 
 	data.setPos(4);

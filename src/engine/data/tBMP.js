@@ -1,4 +1,4 @@
-import Binary from "./Binary";
+import "./Binary";
 import None from "./tBMP/None";
 import Riven from "./tBMP/Riven";
 // This emulates byte overflow similar to lower level languages, so 256==0

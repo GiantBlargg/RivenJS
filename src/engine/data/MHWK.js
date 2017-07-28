@@ -1,4 +1,4 @@
-import Binary from "./Binary";
+import "./Binary";
 export default function (data) {
 	//TODO add proper errors
 	//sanity checks
