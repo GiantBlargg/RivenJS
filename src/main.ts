@@ -2,6 +2,7 @@ import * as $ from 'jquery';
 import engine from "./engine"
 import "./engine/data/Binary";
 import "./dev/dieassert";
+import Binary from "./engine/data/Binary";
 
 $.noConflict(true);
 (<any>console.assert).useDebugger = true;
@@ -57,7 +58,7 @@ function gimme(name, text, callback) {
 			reader.readAsArrayBuffer(findFile(name));
 
 			reader.onloadend = function () {
-				callback(name, new DataView(reader.result));
+				callback(name, new Binary(reader.result));
 			};
 		}
 	} else if (Object.prototype.toString.call(name) === '[object Array]') {
