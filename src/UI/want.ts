@@ -1,4 +1,4 @@
-import $ from "./docHelp";
+import $ from "./doc-help";
 
 interface file {
 	name: string;

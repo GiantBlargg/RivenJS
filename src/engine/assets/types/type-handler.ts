@@ -1,6 +1,6 @@
 export interface StackResourceLocation {
 	stack: string;
-	name: string;
+	ID: number;
 	type: string;
 }
 
