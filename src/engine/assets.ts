@@ -2,16 +2,20 @@ import { StackResourceLocation } from "./assets/types/type-handler";
 import * as ini from "ini";
 import * as PromiseFileReader from "promise-file-reader";
 
-interface stack { name: string; files: string[]; disc: number; }
+export interface stackcfg {
+	name: string;
+	files: string[];
+	disc: number;
+}
 
 export default class Assets {
 
-	private readonly cfg: Map<string, stack> = new Map<string, stack>();
+	private readonly cfg: Map<string, stackcfg> = new Map<string, stackcfg>();
 
 	protected constructor(cfgString: string, private readonly want: (file: string, disc?: number) => Promise<Blob>) {
 		let result = ini.decode(cfgString.split("; Data file sets")[1]);
 		for (let s in result) {
-			let stack: stack = {
+			let stack: stackcfg = {
 				name: s, files: [], disc: result[s].Disc
 			}
 			for (let i = 0; result[s]["File_" + i]; i++) {

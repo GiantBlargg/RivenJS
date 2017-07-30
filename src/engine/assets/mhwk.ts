@@ -14,8 +14,22 @@ async function sliceLoad(file: Blob, start?: number, length?: number) {
 	return new DataStream(await PromiseFileReader.readAsArrayBuffer(file.slice(start, length)));
 }
 
-export default class MHWK {
+class MHWKFile {
 	protected constructor(private readonly file: Blob, private readonly resourceList: Map<string, fileMeta[]>) { }
+
+	getIDs() {
+		let typeIDs = new Map<string, number[]>();
+
+		for (let [key, value] of this.resourceList) {
+			let IDs = new Array<number>(value.length);
+			for (let i = 0; i < value.length;) {
+				IDs[i] = value[i].ID;
+			}
+			typeIDs.set(key, IDs);
+		}
+
+		return typeIDs;
+	}
 
 	static async factory(file: Blob) {
 		const sanityError = "Malformed Header";
@@ -65,5 +79,56 @@ export default class MHWK {
 
 			types.set(typeName, res);
 		}
+		//TODO: the file sizes for tMOVs are often wrong.
+		return new MHWKFile(file, types);
+	}
+
+	load(ID: number, type: string) {
+		let typedList = this.resourceList.get(type);
+		if (!typedList) throw new Error("No files of type " + type + "found");
+
+		let fileInfo = typedList[ID]
+		if (!fileInfo) throw new Error("No file of ID " + ID + " found.");
+
+		return this.file.slice(fileInfo.loc, fileInfo.loc + fileInfo.size);
+	}
+}
+
+export default class Stack {
+	private readonly IDMap: Map<string, number[]>;
+
+	constructor(private readonly archives: MHWKFile[]) {
+		this.IDMap = new Map();
+		for (let a = 0; a < archives.length; a++) {
+			for (let [t, v] of archives[a].getIDs()) {
+				let IDs = new Array<number>();
+				for (let i of v) {
+					IDs[i] = a;
+				}
+				this.IDMap.set(t, IDs);
+			}
+		}
+	}
+
+	load(ID: number, type: string) {
+		let typedIDMap = this.IDMap.get(type)
+		if (!typedIDMap) throw new Error("No files of type " + type + "found");
+
+		return this.archives[typedIDMap[ID]].load(ID, type);
+	}
+
+	static async factory(archivePaths: string[], want: (file: string, disc?: number) => Promise<Blob>) {
+		let archivePromises = new Array<Promise<MHWKFile>>(archivePaths.length);
+		for (let f = 0; f < archivePaths.length; f++) {
+			archivePromises[f] = new Promise(async function (resolve, reject) {
+				try {
+					resolve(await MHWKFile.factory(await want(archivePaths[f])));
+				} catch (err) {
+					reject(err);
+				}
+			});
+		}
+
+		return new Stack(await Promise.all(archivePromises));
 	}
 }
