@@ -28,9 +28,8 @@ export default class Assets {
 
 	static async factory(cfgFile: Blob, want: (file: string, disc?: number) => Promise<Blob>) {
 		return new Assets(await PromiseFileReader.readAsText(cfgFile), want);
-
 	}
 
-	async load(loc: StackResourceLocation) {
+	async get(loc: StackResourceLocation) {
 	}
 }
