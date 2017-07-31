@@ -8,8 +8,7 @@ export interface Resource {
 	self: StackResourceLocation;
 	deps: StackResourceLocation[];
 	soon: StackResourceLocation[];
-	stage: number;
-	data: any;
+	data: Promise<any>;
 }
 
 export interface TypeHandler {
