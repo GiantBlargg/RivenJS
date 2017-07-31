@@ -1,11 +1,11 @@
 import Assets from "./engine/assets"
-import want from "./UI/want";
+import getFile from "./UI/get-file";
 import $ from "./UI/doc-help";
 
 document.body.onload = start;
 
 async function start() {
-	let assets = await Assets.factory(await want("riven.cfg"), want);
+	let assets = await Assets.factory(await getFile("riven.cfg"), getFile);
 	$("go").click(async function () {
 		let type = $("type").value;
 		let data = await assets.get({

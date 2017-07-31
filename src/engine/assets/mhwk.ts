@@ -117,12 +117,12 @@ export default class Stack {
 		return this.archives[typedIDMap[ID]].load(ID, type);
 	}
 
-	static async factory(archivePaths: string[], want: (file: string, disc?: number) => Promise<Blob>) {
+	static async factory(archivePaths: string[], getFile: (file: string, disc?: number) => Promise<Blob>) {
 		let archivePromises = new Array<Promise<MHWKFile>>(archivePaths.length);
 		for (let f = 0; f < archivePaths.length; f++) {
 			archivePromises[f] = new Promise(async function (resolve, reject) {
 				try {
-					resolve(await MHWKFile.factory(await want(archivePaths[f])));
+					resolve(await MHWKFile.factory(await getFile(archivePaths[f])));
 				} catch (err) {
 					reject(err);
 				}
