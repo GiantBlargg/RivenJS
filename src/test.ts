@@ -5,7 +5,9 @@ import $ from "./UI/doc-help";
 document.body.onload = start;
 
 async function start() {
-	let assets = await Assets.factory(await getFile("riven.cfg"), getFile);
+	let cfgFile = getFile("riven.cfg");
+	let iniFile = getFile("Riven.ini");
+	let assets = await Assets.factory(await cfgFile, await iniFile, getFile);
 	$("go").click(async function () {
 		let type = $("type").value;
 		let data = await assets.get({

@@ -4,13 +4,18 @@ export interface StackResourceLocation {
 	type: string;
 }
 
-export interface Resource {
-	self: StackResourceLocation;
-	deps: StackResourceLocation[];
-	soon: StackResourceLocation[];
-	data: Promise<any>;
+interface deps {
+	(loc: StackResourceLocation): void;
+	(stack: string, ID: number, type: string): void;
+	(ID: number, type: string): void;
+}
+
+interface get {
+	(loc: StackResourceLocation): Promise<any>;
+	(stack: string, ID: number, type: string): Promise<any>;
+	(ID: number, type: string): Promise<any>;
 }
 
 export interface TypeHandler {
-	(hdr: Resource, ...deps: Resource[]): Resource;
+	(data: Blob, deps: deps, soon: deps, get: get): Promise<any>;
 }
