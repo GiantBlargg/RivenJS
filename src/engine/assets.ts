@@ -67,44 +67,19 @@ export default class Assets {
 		let processFunc = types.get(loc.type);
 		if (!processFunc) throw new Error(loc.type + " is not a recognized type.");
 
-		function deps(soon?: boolean) {
-			return function (arg1: StackResourceLocation | number | string,
-				arg2?: number | string, arg3?: string) {
-				let depLoc = that.resolvePartialLoc(loc, arg1, arg2, arg3);
+		function deps(depLoc: StackResourceLocation, soon?: boolean) {
 
-				let self = <Resource>that.loadRes.get(that.stringifyLoc(loc));
-				assert(self, "WTF!");
-				(soon ? self.soon : self.deps).push(depLoc);
-				that.updatesDeps();
-			};
+			let self = <Resource>that.loadRes.get(that.stringifyLoc(loc));
+			assert(self, "WTF!");
+			(soon ? self.soon : self.deps).push(depLoc);
+			that.updatesDeps();
 		}
 
-		function get(arg1: StackResourceLocation | number | string,
-			arg2?: number | string, arg3?: string) {
-			let depLoc = that.resolvePartialLoc(loc, arg1, arg2, arg3);
-
+		function get(depLoc: StackResourceLocation) {
 			return that.get(depLoc);
 		}
 
-		return processFunc(stack.load(loc.ID, loc.type), deps(true), deps(false), get);
-	}
-
-	private resolvePartialLoc(oldLoc: StackResourceLocation, arg1: StackResourceLocation | number | string,
-		arg2?: number | string, arg3?: string) {
-
-		let depLoc: StackResourceLocation;
-		if (typeof arg1 == "number") {
-			assert(typeof arg2 == "string", "Bad args");
-			depLoc = { stack: oldLoc.stack, ID: arg1, type: <string>arg2 };
-		} else if (typeof arg1 == "string") {
-			assert(typeof arg2 == "number", "Bad args");
-			assert(typeof arg3 == "string", "Bad args");
-			depLoc = { stack: arg1, ID: <number>arg2, type: <string>arg3 };
-		} else {
-			//arg1 is a full loc
-			depLoc = arg1;
-		}
-		return depLoc;
+		return processFunc(loc, stack.load(loc.ID, loc.type), deps, get);
 	}
 
 	private load(loc: StackResourceLocation) {
