@@ -44,7 +44,7 @@ export default class Assets {
 		console.log(this.cfg);
 	}
 
-	get(loc: StackResourceLocation) {
+	get = (loc: StackResourceLocation) => {
 		let res = this.loadRes.get(this.stringifyLoc(loc));
 		if (res) {
 			return res.data;
@@ -75,11 +75,7 @@ export default class Assets {
 			that.updatesDeps();
 		}
 
-		function get(depLoc: StackResourceLocation) {
-			return that.get(depLoc);
-		}
-
-		return processFunc(loc, stack.load(loc.ID, loc.type), deps, get);
+		return processFunc(loc, stack.load(loc.ID, loc.type), deps, this.get);
 	}
 
 	private load(loc: StackResourceLocation) {
@@ -111,7 +107,7 @@ export default class Assets {
 		}
 	}
 
-	stringifyLoc(resLoc: StackResourceLocation) {
+	private stringifyLoc(resLoc: StackResourceLocation) {
 		//Collisions are possible but unlikely.
 		return resLoc.type + resLoc.ID + resLoc.stack;
 	}
