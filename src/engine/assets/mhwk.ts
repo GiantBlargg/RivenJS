@@ -1,6 +1,6 @@
 import DataStream from "./data-stream";
 import assert from "./assert";
-import * as PromiseFileReader from "promise-file-reader";
+import { readAsArrayBuffer } from "promise-file-reader";
 
 interface fileMeta {
 	ID: number;
@@ -11,7 +11,7 @@ interface fileMeta {
 async function sliceLoad(file: Blob, start?: number, length?: number) {
 	let end: number | undefined = undefined;
 	if (length) { end = (start || 0) + length; }
-	return new DataStream(await PromiseFileReader.readAsArrayBuffer(file.slice(start, length)));
+	return new DataStream(await readAsArrayBuffer(file.slice(start, end)));
 }
 
 class MHWKFile {
@@ -21,9 +21,9 @@ class MHWKFile {
 		let typeIDs = new Map<string, number[]>();
 
 		for (let [key, value] of this.resourceList) {
-			let IDs = new Array<number>(value.length);
-			for (let i = 0; i < value.length;) {
-				IDs[i] = value[i].ID;
+			let IDs = new Array<number>();
+			for (let i in value) {
+				IDs.push(parseInt(i));
 			}
 			typeIDs.set(key, IDs);
 		}
@@ -41,9 +41,9 @@ class MHWKFile {
 		assert(header.readString(4) == "RSRC", sanityError);
 		assert(header.readUint16() == 0x100, sanityError);
 		header.pos += 2;
-		assert(header.readUint16() == file.size);
+		assert(header.readUint32() == file.size);
 
-		let resDirLoc = header.readUint16();
+		let resDirLoc = header.readUint32();
 
 		let fileTblLoc = header.readUint16() + resDirLoc;
 		let fileTblSize = header.readUint16();
@@ -67,7 +67,7 @@ class MHWKFile {
 			let res = new Array<fileMeta>();
 			for (let r = 0; r < resNum; r++) {
 				let ID = resTbl.readUint16();
-				let index = resTbl.readUint16();
+				let index = resTbl.readUint16() - 1;
 				assert(index <= fileNum, "Requested file has an out of bounds index");
 				fileTbl.pos = index * 10 + 4;
 				let loc = fileTbl.readUint32();
@@ -75,7 +75,7 @@ class MHWKFile {
 				res[ID] = { ID: ID, loc: loc, size: size };
 			}
 
-			typeTbl.pos += 4;//Skip Name Table Location
+			typeTbl.pos += 2;//Skip Name Table Location
 
 			types.set(typeName, res);
 		}
@@ -122,7 +122,8 @@ export default class Stack {
 		for (let f = 0; f < archivePaths.length; f++) {
 			archivePromises[f] = new Promise(async function (resolve, reject) {
 				try {
-					resolve(await MHWKFile.factory(await getFile(archivePaths[f])));
+					console.log("Loading " + archivePaths[f]);
+					resolve(MHWKFile.factory(await getFile(archivePaths[f])));
 				} catch (err) {
 					reject(err);
 				}

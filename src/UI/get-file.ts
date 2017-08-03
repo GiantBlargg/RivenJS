@@ -18,7 +18,7 @@ function check() {
 		return;
 	for (let w = 0; w < pending.length; w++) {
 		for (let f = 0; f < files.length; f++) {
-			if (files[f].name.toLowerCase() == pending[w].name.toLowerCase()) {
+			if (files[f].name.toLowerCase() == pending[w].name.toLowerCase().split('/').pop()) {
 				pending[w].resolve(files[f]);
 				pending.splice(w, 1);
 				w--;

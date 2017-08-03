@@ -1,7 +1,7 @@
 import { StackResourceLocation } from "./assets/types/type-handler";
 import types from "./assets/types/types";
 import * as ini from "ini";
-import * as PromiseFileReader from "promise-file-reader";
+import { readAsText } from "promise-file-reader";
 import Stack from "./assets/mhwk";
 import assert from "./assets/assert";
 
@@ -51,8 +51,14 @@ export default class Assets {
 		}
 		else {
 			//We'll load the data and store it, but because it isn't in the dependancy tree it'll get cleaned up.
+			console.warn(this.stringifyLoc(loc) + " wasn't on the dependancy tree when it was loaded.");
 			return this.load(loc).data;
 		}
+	}
+
+	setDepsTreeRoot(loc: StackResourceLocation, i = 0) {
+		this.depsTreeRoot[i] = loc;
+		this.updatesDeps();
 	}
 
 	private async asyncLoad(loc: StackResourceLocation) {
@@ -63,6 +69,7 @@ export default class Assets {
 			let stackcfg = this.cfg.get(loc.stack);
 			if (!stackcfg) throw new Error(loc.stack + " is not a recognized stack");
 			stack = await Stack.factory(stackcfg.files, this.getFile);
+			this.mhwk.set(loc.stack, stack);
 		}
 		let processFunc = types.get(loc.type);
 		if (!processFunc) throw new Error(loc.type + " is not a recognized type.");
@@ -75,7 +82,7 @@ export default class Assets {
 			that.updatesDeps();
 		}
 
-		return processFunc(loc, stack.load(loc.ID, loc.type), deps, this.get);
+		return processFunc(stack.load(loc.ID, loc.type), loc, deps, this.get);
 	}
 
 	private load(loc: StackResourceLocation) {
@@ -96,6 +103,7 @@ export default class Assets {
 			if (!res) {
 				res = this.load(d);
 			}
+			this.deps.set(this.stringifyLoc(d), d);
 			this.crawlDeps(res.deps, depth);
 			if (depth > 0) this.crawlDeps(res.soon, depth - 1);
 		}
@@ -115,7 +123,7 @@ export default class Assets {
 	static async factory(cfgFile: Blob, iniFile: Blob,
 		getFile: (file: string, disc?: number) => Promise<Blob>) {
 
-		return new Assets(await PromiseFileReader.readAsText(cfgFile),
-			await PromiseFileReader.readAsText(iniFile), getFile);
+		return new Assets(await readAsText(cfgFile),
+			await readAsText(iniFile), getFile);
 	}
 }

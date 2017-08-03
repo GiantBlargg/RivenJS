@@ -13,5 +13,5 @@ interface get {
 }
 
 export interface TypeHandler {
-	(loc: StackResourceLocation, data: Blob, deps: deps, get: get): Promise<any>;
+	(data: Blob, loc: StackResourceLocation, deps: deps, get: get): Promise<any>;
 }

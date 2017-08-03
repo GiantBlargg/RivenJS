@@ -10,11 +10,13 @@ async function start() {
 	let assets = await Assets.factory(await cfgFile, await iniFile, getFile);
 	$("go").click(async function () {
 		let type = $("type").value;
-		let data = await assets.get({
+		let loc = {
 			stack: $("stack").value,
 			ID: parseInt($("id").value),
 			type: type
-		});
+		};
+		assets.setDepsTreeRoot(loc);
+		let data = await assets.get(loc);
 		switch (type) {
 			default:
 				console.log(data);

@@ -1,7 +1,7 @@
 
 export default class DataStream extends DataView {
 
-	private _pos = 0;
+	pos = 0;
 
 	getString(byteOffset: number, length?: number) {
 
@@ -22,16 +22,8 @@ export default class DataStream extends DataView {
 	readString(length?: number) {
 		let string = this.getString(this.pos, length);
 		this.pos += string.length;
-		if (length != undefined) { this.pos++; }
+		if (length == undefined) { this.pos++; }
 		return string;
-	}
-
-	get pos() {
-		return this._pos;
-	}
-	set pos(value) {
-		if (value > 0 && value <= this.byteLength) { this._pos = value; }
-		else { throw new Error("Out of bounds"); }
 	}
 
 	readInt8() {
@@ -63,8 +55,8 @@ export default class DataStream extends DataView {
 		return this.getFloat32(this.pos - 4, littleEndian);
 	};
 	readFloat64(littleEndian?: boolean) {
-		this.pos += 4;
-		return this.getFloat64(this.pos - 4, littleEndian);
+		this.pos += 8;
+		return this.getFloat64(this.pos - 8, littleEndian);
 	};
 
 	writeInt8(value: number) {
@@ -96,7 +88,7 @@ export default class DataStream extends DataView {
 		return this.setFloat32(this.pos - 4, value, littleEndian);
 	};
 	writeFloat64(value: number, littleEndian?: boolean) {
-		this.pos += 4;
-		return this.setFloat64(this.pos - 4, value, littleEndian);
+		this.pos += 8;
+		return this.setFloat64(this.pos - 8, value, littleEndian);
 	};
 }
