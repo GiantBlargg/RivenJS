@@ -17,10 +17,15 @@ async function start() {
 		};
 		assets.setDepsTreeRoot(loc);
 		let data = await assets.get(loc);
-		switch (type) {
-			default:
-				console.log(data);
-				break;
+		if (data instanceof ImageData) {
+			let canvas = document.createElement("canvas");
+			canvas.width = data.width;
+			canvas.height = data.height;
+			let ctx = <CanvasRenderingContext2D>canvas.getContext("2d");
+			ctx.putImageData(data, 0, 0);
+			$("container").prependChild(canvas);
+		} else {
+			console.log(data);
 		}
 	});
 }

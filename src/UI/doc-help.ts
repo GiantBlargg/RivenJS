@@ -41,6 +41,10 @@ class HelpElem {
 		if (this.element instanceof HTMLElement) { this.element.style.display = "block"; }
 		else { throw new Error("Element is not an HTMLElement. How did you manage to do that?"); }
 	}
+
+	prependChild(child: Node) {
+		this.element.insertBefore(child, this.element.firstChild);
+	}
 }
 
 export default function get(ID: string) {
