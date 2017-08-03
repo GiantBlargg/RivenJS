@@ -4,11 +4,11 @@ export interface StackResourceLocation {
 	type: string;
 }
 
-interface deps {
+export interface deps {
 	(loc: StackResourceLocation, soon?: boolean): void;
 }
 
-interface get {
+export interface get {
 	(loc: StackResourceLocation): Promise<any>;
 }
 
