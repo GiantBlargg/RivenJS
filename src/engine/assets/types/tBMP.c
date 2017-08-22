@@ -299,15 +299,17 @@ void *tBMP(void *ptr, uint32_t size) {
 		}
 	}
 
-	uint8_t *data =
-	    decompRiven(ptr, size - (ptr - start), bytesPerRow * height);
+	uint8_t *data;
+
+	if ((format & FM_1COMP) == COMP_RIVEN)
+		data = decompRiven(ptr, size - (ptr - start), bytesPerRow * height);
 
 	// Simple output for now.
 	void *out = malloc(4 + width * height * 4);
 	((uint16_t *)out)[0] = width;
 	((uint16_t *)out)[1] = height;
 	uint8_t *outptr = out + 4;
-	if (palette)
+	if (palette) {
 		for (uint32_t i = 0; i < bytesPerRow * height; i++) {
 			struct colour c = palette[data[i]];
 			if (i % bytesPerRow < width) {
@@ -318,6 +320,9 @@ void *tBMP(void *ptr, uint32_t size) {
 				outptr += 4;
 			}
 		}
+		free(palette);
+	}
 	free(start);
+	free(data);
 	return out;
 }
