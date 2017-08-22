@@ -22,9 +22,7 @@ function ptrToImageData(ptr: number) {
 
 export default async function handle(data: Blob) {
 	let ptr = await blobToPtr(data);
-	let start = performance.now();
 	let outptr = (<any>Module)._tBMP(ptr, data.size);
-	console.log("Decoding took %d ms.", performance.now() - start);
 	let imagedata = ptrToImageData(outptr);
 	return imagedata;
 }
