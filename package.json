@@ -4,7 +4,7 @@
   "description": "An attempt to recreate Riven: The Sequel to Myst in a web browser. Requires the data from Riven at runtime.",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "gulp",
+    "start": "gulp serve",
     "build": "gulp"
   },
   "repository": {
@@ -27,6 +27,6 @@
     "ts-loader": "^2.3.3",
     "typescript": "^2.5.1",
     "webpack": "^3.5.5",
-    "webpack-stream": "^4.0.0"
+    "webpack-dev-server": "^2.7.1"
   }
 }
