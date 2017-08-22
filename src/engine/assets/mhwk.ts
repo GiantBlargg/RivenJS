@@ -113,8 +113,9 @@ export default class Stack {
 	load(ID: number, type: string) {
 		let typedIDMap = this.IDMap.get(type)
 		if (!typedIDMap) throw new Error("No files of type " + type + "found");
-
-		return this.archives[typedIDMap[ID]].load(ID, type);
+		let archive = this.archives[typedIDMap[ID]];
+		if (!archive) throw new Error("No file of ID " + ID + " found.");
+		return archive.load(ID, type);
 	}
 
 	static async factory(archivePaths: string[], getFile: (file: string, disc?: number) => Promise<Blob>) {
