@@ -2,6 +2,7 @@
 #include <endian.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define readUint8(ptr)                                                         \
 	*(uint8_t *)ptr;                                                           \
@@ -300,9 +301,18 @@ void *tBMP(void *ptr, uint32_t size) {
 	}
 
 	uint8_t *data;
+	uint32_t outsize = bytesPerRow * height;
 
-	if ((format & FM_1COMP) == COMP_RIVEN)
-		data = decompRiven(ptr, size - (ptr - start), bytesPerRow * height);
+	switch (format & FM_1COMP) {
+	case COMP_RIVEN:
+		data = decompRiven(ptr, size - (ptr - start), outsize);
+		break;
+	case COMP_NONE:
+		data = malloc(outsize);
+		memcpy(data, ptr, outsize);
+		break;
+	}
+	free(start);
 
 	// Simple output for now.
 	void *out = malloc(4 + width * height * 4);
@@ -322,7 +332,6 @@ void *tBMP(void *ptr, uint32_t size) {
 		}
 		free(palette);
 	}
-	free(start);
 	free(data);
 	return out;
 }
